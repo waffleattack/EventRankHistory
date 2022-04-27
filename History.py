@@ -54,7 +54,7 @@ if __name__ == "__main__":
         sys.exit()
     matchResp = requests.get(matchURL, headers=headers) 
     matchList = matchResp.json()
-    print(len(matchList))
+    matchList = [x for x in matchList if x['comp_level'] in ['qm']]
     matchList=sorted(matchList, key=lambda x:x['actual_time'])[:matchNum]
     print(f"Rankings After Match {matchNum} at Event {event}")
     teamDict = {}   
@@ -65,7 +65,10 @@ if __name__ == "__main__":
         teams = match["alliances"][color]["team_keys"]
         stats = match["score_breakdown"][color]
         for team in teams:
-         teamDict[team].matchResults(stats['totalPoints'], stats['rp'])
+         if team in match['alliances'][color]['dq_team_keys']:
+             teamDict[team].matchResults(0,0)
+         else:
+             teamDict[team].matchResults(stats['totalPoints'], stats['rp'])
 
     for rank, team in enumerate(sorted(teamDict.values())[::-1]):
         print(f'{rank+1}. {str(team)[3:]} with a ranking score of {str(team.rankingScore)[:3]} and an average match of {floor(team.avgMatch)}')
