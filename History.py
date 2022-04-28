@@ -68,7 +68,7 @@ if __name__ == "__main__":
          if team in match['alliances'][color]['dq_team_keys']:
              teamDict[team].matchResults(0,0)
          else:
-             teamDict[team].matchResults(stats['totalPoints'], stats['rp'])
+             teamDict[team].matchResults(stats['totalPoints']-stats["foulPoints"], stats['rp'])
 
     for rank, team in enumerate(sorted(teamDict.values())[::-1]):
         print(f'{rank+1}. {str(team)[3:]} with a ranking score of {str(team.rankingScore)[:3]} and an average match of {floor(team.avgMatch)}')
